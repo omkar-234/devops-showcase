@@ -1,0 +1,19 @@
+---
+- name: DevOps Showcase Playbook
+  hosts: local
+  become: yes
+  tasks:
+
+    - name: Check Docker is running
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Check our app container is running
+      shell: docker ps | grep devops-app
+      register: container_status
+
+    - name: Show container status
+      debug:
+        msg: "Container status: {{ container_status.stdout }}"

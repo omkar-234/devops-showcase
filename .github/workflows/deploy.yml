@@ -1,0 +1,26 @@
+name: DevOps Showcase Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Stop Old Container
+        run: docker stop devops-app || true
+
+      - name: Remove Old Container
+        run: docker rm devops-app || true
+
+      - name: Build Docker Image
+        run: docker build -t devops-showcase ./app
+
+      - name: Run New Container
+        run: docker run -d -p 5000:5000 --name devops-app devops-showcase
